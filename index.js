@@ -18,13 +18,18 @@ app.use(express.static('public'));
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
-
+let resObject = {}
+app.enable('trust proxy')
 // your first API endpoint...
-app.get('/api/hello', function (req, res) {
-  res.json({ greeting: 'hello API' });
+app.get('/api/whoami', function (req, res) {
+  resObject['ipaddress'] = req.ip
+  resObject['language'] = req.get("accept-language")
+  resObject['software'] = req.get("user-agent")
+  res.json(resObject)
 });
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
+
